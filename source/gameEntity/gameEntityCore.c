@@ -7,15 +7,51 @@
 //
 // ===========================================================================
 
+
 // ===========================================================================
 // 		Variáveis
 // ===========================================================================
 
-enum TEXTURES{
-	TXT_GROUND,
-	TXT_
-}
+enum {
+	DIR_NONE,
+	DIR_UP,
+	DIR_DOWN,
+	DIR_LEFT,
+	DIR_RIGHT,
+};
+
+typedef struct Entity{
+	float xPos;
+	float yPos;
+	float moveSpeed;
+	int moveDirection;
+	Rectangle colideBox;
+
+
+} Entity;
+
+
+// ===========================================================================
+// 		Dependencias
+// ===========================================================================
+
+#include "mapColliders.c"
+#include "player.c"
 
 // ===========================================================================
 // 		Funções
 // ===========================================================================
+
+void gameEntityUpdate(){
+	playerUpdate();
+}
+
+void gameEntityInit(){
+
+	mapCollidersInit();
+	playerInit();
+
+}
+
+
+

@@ -29,6 +29,8 @@ const int SCREEN_WIDTH = 1200;
 const int SCREEN_HEIGHT = 800;
 const int START_SCREEN_DIMENSION = 650;
 const int TILE_SIZE = 50;
+const int TILE_LINES = SCREEN_HEIGHT/TILE_SIZE;
+const int TILE_ROWS = SCREEN_WIDTH/TILE_SIZE;
     
 // Bool
 bool isGameRunning = false;
@@ -41,6 +43,9 @@ int startGame();
 // ===========================================================================
 
 #include "tempMap.c"
+#include "gameTextures/gameTexturesCore.c"
+#include "gameData/gameDataCore.c"
+#include "gameEntity/gameEntityCore.c"
 
 // ===========================================================================
 // 		Core
@@ -50,13 +55,17 @@ int main(void){
 	 
 	// Inicializa a janela 
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "ZIIL - Zelda");
-	SetWindowPosition((GetMonitorWidth(GetCurrentMonitor())/2) - SCREEN_WIDTH/2, GetMonitorHeight(GetCurrentMonitor())/2 - SCREEN_HEIGHT/2);
+	SetWindowPosition((GetMonitorWidth(GetCurrentMonitor())/2) - SCREEN_WIDTH/2, (GetMonitorHeight(GetCurrentMonitor())/2 - SCREEN_HEIGHT/2)+ 50);
+	//SetWindowState(FLAG_WINDOW_UNDECORATED);
 	SetTargetFPS(60);
 
-	// Carrega as informações salvas do jogador
-	//loadPlayerData();
-
 	// Inicializa cada arquivo e suas dependências
+	gameTexturesInit();
+	gameDataInit();
+	gameEntityInit();
+
+	// Carrega as informações salvas do jogos
+	gameDataLoad();
 
 	// Inicia mostrando o menu inicial
 
@@ -69,6 +78,8 @@ int main(void){
         BeginDrawing();
 
         // Processa cada arquivo e suas dependências
+        gameTexturesUpdate();
+        gameEntityUpdate();
 
         //Raylib end draw
         EndDrawing();
