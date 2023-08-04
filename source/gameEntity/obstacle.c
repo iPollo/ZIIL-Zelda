@@ -7,15 +7,15 @@
 //
 // ===========================================================================
 
-#define MAX_COLLIDE_ROCKS 50
+#define MAX_MAP_OBSTACLE 50
 
 // ===========================================================================
 // 		Variáveis
 // ===========================================================================
 
-Rectangle mapCollideBox[MAX_COLLIDE_ROCKS];
+Rectangle mapObstacle[MAX_MAP_OBSTACLE];
 
-int rockCounter = -1;
+int obstacleAmount = -1;
 
 // ===========================================================================
 // 		Inicializa as collides das rochas (arbustos)
@@ -27,11 +27,11 @@ void mapCollidersInit(){
 	for(int i = 0; i < TILE_LINES; i++){
 		for(int j = 0; j < TILE_ROWS; j++){
 			if(MAP[i][j] == 'O'){
-                rockCounter++;
-                mapCollideBox[rockCounter].x = j * TILE_SIZE;
-                mapCollideBox[rockCounter].y = i * TILE_SIZE;
-                mapCollideBox[rockCounter].width = TILE_SIZE;
-                mapCollideBox[rockCounter].height = TILE_SIZE;
+                obstacleAmount++;
+                mapObstacle[obstacleAmount].x = j * TILE_SIZE;
+                mapObstacle[obstacleAmount].y = i * TILE_SIZE;
+                mapObstacle[obstacleAmount].width = TILE_SIZE;
+                mapObstacle[obstacleAmount].height = TILE_SIZE;
 			}
 		}
 	}

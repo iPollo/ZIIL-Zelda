@@ -7,7 +7,7 @@
 //
 // ===========================================================================
 
-#define MAX_GAME_TEXTURES 2
+#define MAX_GAME_TEXTURES 32
 
 // ===========================================================================
 // 		Variáveis
@@ -16,6 +16,8 @@
 enum{
 	TXT_GROUND,
 	TXT_ROCK,
+	TXT_PLAYER_STATE,
+	TXT_PLAYER_WALK
 };
 
 Texture2D gameTextures[MAX_GAME_TEXTURES];
@@ -29,6 +31,8 @@ void gameTexturesInit(){
 
 	gameTextures[TXT_GROUND] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_GROUND.png");
 	gameTextures[TXT_ROCK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_ROCK.png");
+	gameTextures[TXT_PLAYER_STATE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/PLAYER_STATE_SPRITESHEET.png");
+	gameTextures[TXT_PLAYER_WALK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/PLAYER_WALK_SPRITESHEET.png");
 
 }
 

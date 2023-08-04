@@ -13,11 +13,11 @@
 // ===========================================================================
 
 enum {
-	DIR_NONE,
 	DIR_UP,
+	DIR_RIGHT,
 	DIR_DOWN,
 	DIR_LEFT,
-	DIR_RIGHT,
+	DIR_NONE,
 };
 
 typedef struct Entity{
@@ -35,7 +35,7 @@ typedef struct Entity{
 // 		Dependencias
 // ===========================================================================
 
-#include "mapColliders.c"
+#include "obstacle.c"
 #include "player.c"
 
 // ===========================================================================
