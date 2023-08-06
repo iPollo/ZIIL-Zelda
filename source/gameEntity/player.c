@@ -9,6 +9,10 @@
 
 
 #define WALK_ANIM_FRAME_SPEED 5
+#define PLAYER_ATTACK_COLDOWN 8
+#define MAX_PLAYER_LIFES 3
+
+#define COLLOR_TEXT  CLITERAL(Color){ 255, 234, 117, 255 }
 
 // ===========================================================================
 // 		Variáveis
@@ -18,9 +22,12 @@ const float PLAYER_MOVE_SPEED = 1.5f;
 const float PLAYER_NORMALIZED_MOVE_SPEED = 1.2f;
 const int PLAYER_SPRITE_DIMENSION = 65;
 
-int ANIMFRAME_walk = 0;
+int ANIMFRAME_walk = 0; 
 
 int walkAnimSpriteIndex = 0;
+int attackAnimSpriteIndex = 0;
+
+int playerColDownAttack = 0;
 
 Entity player;
 
@@ -43,6 +50,9 @@ void playerInit(){
 	player.yPos = 0;
 	player.moveDirection = DIR_NONE;
 	player.moveSpeed = PLAYER_MOVE_SPEED;
+	player.isAttacking = false;
+	player.canAttack = true;
+	player.life = 2;
 	//player.colideBox = {65}
 }
 
@@ -50,9 +60,36 @@ bool isPlayerMoving(){
 
 	if(!IsKeyDown(KEY_W) && !IsKeyDown(KEY_S) && !IsKeyDown(KEY_D) && !IsKeyDown(KEY_A)) return false;
 	return true;
-
 }
 
+
+void playerDrawHud(){
+
+	//DrawTexture(gameTextures[TXT_HUD_LIFE], 20, 20, WHITE); 
+
+	DrawTexturePro(gameTextures[TXT_HUD_SCORE], (Rectangle){0,0,44,120}, (Rectangle){20, 80, 50, 136}, (Vector2){0,0},0, WHITE);
+	DrawTexturePro(gameTextures[TXT_HUD_LIFE], (Rectangle){0,0,161,64}, (Rectangle){20, 20, 201, 80}, (Vector2){0,0},0, WHITE);
+
+
+	DrawTexturePro(gameTextures[TXT_HUD_SCOREBACK], (Rectangle){0,0,25,20}, (Rectangle){70, 119, 45, 35}, (Vector2){0,0},0, WHITE);
+	DrawTexturePro(gameTextures[TXT_HUD_SCOREBACK], (Rectangle){0,0,25,20}, (Rectangle){70, 172, 45, 35}, (Vector2){0,0},0, WHITE);
+	
+
+	for(int i = 0; i < MAX_PLAYER_LIFES; i++){
+		if(i < player.life){
+			DrawTexturePro(gameTextures[TXT_HUD_LIFEBAR], (Rectangle){0,0,161,64}, (Rectangle){20 + i*19, 21, 201, 80}, (Vector2){0,0},0, WHITE);
+		}
+
+
+	}
+
+	//DrawText(TextFormat("SCORE: 10"), 80+1, 130+1, 15, BLACK);  
+	DrawText(TextFormat("10"), 79, 130, 15, COLLOR_TEXT); 
+	//DrawText(TextFormat("SCORE: 10"), 80+1, 185+1, 15, BLACK);  
+	DrawText(TextFormat("1"), 79, 183, 15, COLLOR_TEXT); 
+
+
+}
 
 void playerDraw(){
 
@@ -65,6 +102,7 @@ void playerDraw(){
 		ANIMFRAME_walk = 0;
 	}
 
+	// Atualiza o index do sprite específico
 	int idleAnimSpriteIndex = 1;
 	if(isPlayerMoving()) idleAnimSpriteIndex = 1;
 	else { 
@@ -73,11 +111,16 @@ void playerDraw(){
 	}
 
 
+	// Desenha cada elemento
 	Rectangle tempTex2 = {PLAYER_SPRITE_DIMENSION * walkAnimSpriteIndex, PLAYER_SPRITE_DIMENSION * idleAnimSpriteIndex, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
 	DrawTextureRec(gameTextures[TXT_PLAYER_WALK], tempTex2, (Vector2){player.xPos - 5 , player.yPos -5}, WHITE); 
+		
 
-	Rectangle tempTexture = {PLAYER_SPRITE_DIMENSION * player.moveDirection, PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
-	DrawTextureRec(gameTextures[TXT_PLAYER_STATE], tempTexture, (Vector2){player.xPos - 5, player.yPos - 5}, WHITE);
+	if(!player.isAttacking){
+		Rectangle tempTexture = {PLAYER_SPRITE_DIMENSION * player.moveDirection, PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
+		DrawTextureRec(gameTextures[TXT_PLAYER_STATE], tempTexture, (Vector2){player.xPos - 5, player.yPos - 5}, WHITE);
+	}
+
 
 
 	// For Debug
@@ -134,6 +177,90 @@ void playerUpdateMoveDirection(){
 
 }
 
+int ANIMFRAME_attack = 0;
+#define ATTACK_ANIM_FRAME_SPEED 3
+
+bool playerProcessAttack(){
+
+
+	// Col down para atacar novamete
+	if(!player.canAttack){
+		playerColDownAttack++;
+		if(playerColDownAttack >= PLAYER_ATTACK_COLDOWN){
+			playerColDownAttack = 0;
+			player.canAttack = true;
+		}
+		return false;
+	}
+
+
+	// Processa o ataque
+	if(player.isAttacking){
+
+		ANIMFRAME_attack++;
+
+		// Frame update
+		if(ANIMFRAME_attack >= ATTACK_ANIM_FRAME_SPEED){
+			attackAnimSpriteIndex++;
+			ANIMFRAME_attack = 0;
+		}
+
+
+		// Drawing
+		Rectangle tempRec = {(PLAYER_SPRITE_DIMENSION) * attackAnimSpriteIndex, PLAYER_SPRITE_DIMENSION * 1, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
+		Rectangle tempRec2 = {(PLAYER_SPRITE_DIMENSION) * attackAnimSpriteIndex, PLAYER_SPRITE_DIMENSION * player.moveDirection, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
+		
+
+		int xPosOffset = 0;
+		int yPosOffset = 0;
+		int rotOffset = 0;
+
+
+		if(player.moveDirection == DIR_UP){
+			xPosOffset = 0;
+			yPosOffset = PLAYER_SPRITE_DIMENSION/2 * - 1;
+			rotOffset = 270;
+		}
+		if(player.moveDirection == DIR_DOWN){
+			xPosOffset = 0;
+			yPosOffset = PLAYER_SPRITE_DIMENSION/2;
+			rotOffset = 90;
+		}
+		if(player.moveDirection == DIR_LEFT){
+			xPosOffset = PLAYER_SPRITE_DIMENSION/2 * - 1;
+			yPosOffset = 0;
+			rotOffset = 180;
+		}
+		if(player.moveDirection == DIR_RIGHT){
+			xPosOffset = PLAYER_SPRITE_DIMENSION/2;
+			yPosOffset = 0;
+			rotOffset = 0;
+		}
+
+		Rectangle destRec = {(player.xPos + (PLAYER_SPRITE_DIMENSION/2) - 5) + xPosOffset, (player.yPos + (PLAYER_SPRITE_DIMENSION/2) - 5) + yPosOffset, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
+
+		DrawTextureRec(gameTextures[TXT_ATTACK], tempRec2, (Vector2){player.xPos -5 , player.yPos -5}, WHITE); 
+
+		DrawTexturePro(gameTextures[TXT_SLASH], tempRec, destRec, (Vector2){(PLAYER_SPRITE_DIMENSION/2), (PLAYER_SPRITE_DIMENSION/2)}, rotOffset, WHITE);
+
+		// Re-set sprite
+		if(attackAnimSpriteIndex == 2){
+			player.isAttacking = false;
+			player.canAttack = false;
+			ANIMFRAME_attack = 0;
+			attackAnimSpriteIndex = 0;
+		}
+
+	} else if(IsKeyPressed(KEY_J)){
+		player.isAttacking = true;
+	}
+
+
+
+    return false;
+
+}
+
 bool playerProcessMovement(){
 
 	// Normaliza o vetor da velocidade na diagonals
@@ -175,5 +302,7 @@ bool playerProcessMovement(){
 
 void playerUpdate(){
 	playerProcessMovement();
+	playerProcessAttack();
 	playerDraw();
+	playerDrawHud();
 }

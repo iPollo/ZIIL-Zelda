@@ -64,12 +64,14 @@ int main(void){
 	gameDataInit();
 	gameEntityInit();
 
-	// Carrega as informações salvas do jogos
+	// Carrega as informaçõeSSs salvas do jogosss
 	gameDataLoad();
 
-	// Inicia mostrando o menu inicial
+	// Inicia mostrando o menu inicialssss
+   
 
 	// Game Loop principal
+
     while (!WindowShouldClose()) 
     {
 

@@ -17,7 +17,15 @@ enum{
 	TXT_GROUND,
 	TXT_ROCK,
 	TXT_PLAYER_STATE,
-	TXT_PLAYER_WALK
+	TXT_PLAYER_WALK,
+    TXT_SLASH,
+    TXT_ATTACK,
+    TXT_MONSTER_STATE,
+    TXT_MONSTER_WALK,
+    TXT_HUD_LIFE,
+    TXT_HUD_SCORE,
+    TXT_HUD_LIFEBAR,
+    TXT_HUD_SCOREBACK,
 };
 
 Texture2D gameTextures[MAX_GAME_TEXTURES];
@@ -33,6 +41,17 @@ void gameTexturesInit(){
 	gameTextures[TXT_ROCK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_ROCK.png");
 	gameTextures[TXT_PLAYER_STATE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/PLAYER_STATE_SPRITESHEET.png");
 	gameTextures[TXT_PLAYER_WALK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/PLAYER_WALK_SPRITESHEET.png");
+	gameTextures[TXT_SLASH] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/SLASH_SPRITESHEET.png");
+	gameTextures[TXT_ATTACK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/PLAYER_ATTACK_SPRITESHEET.png");
+	gameTextures[TXT_MONSTER_STATE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_STATE_SPRITESHEET.png");
+	gameTextures[TXT_MONSTER_WALK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_WALK_SPRITESHEET.png");
+	gameTextures[TXT_HUD_LIFE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_HUD_LIFE.png");
+	gameTextures[TXT_HUD_SCORE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_HUD_SCORE.png");
+	gameTextures[TXT_HUD_LIFEBAR] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_HUD_LIFEBAR.png");
+	gameTextures[TXT_HUD_SCOREBACK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_HUD_SCOREBACK.png");
+
+
+
 
 }
 
@@ -42,7 +61,7 @@ void drawMap(){
 	// Desenha o plano de fundo
 	for(int i = 0; i < TILE_LINES; i++){
 		for(int j = 0; j < TILE_ROWS; j++){
-			if(MAP[i][j] == 'B'){
+			if(MAP[i][j] == 'B' || MAP[i][j] == 'M'){
 				DrawTexture(gameTextures[TXT_GROUND], j * TILE_SIZE, (i * TILE_SIZE), WHITE);
 			}
 			else if(MAP[i][j] == 'O'){

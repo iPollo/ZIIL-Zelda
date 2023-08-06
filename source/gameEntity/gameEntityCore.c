@@ -26,6 +26,12 @@ typedef struct Entity{
 	float moveSpeed;
 	int moveDirection;
 	Rectangle colideBox;
+	bool isAttacking;
+	bool canAttack;
+	bool isVisible;
+	int life;
+	int score;
+	int level;
 
 
 } Entity;
@@ -37,12 +43,14 @@ typedef struct Entity{
 
 #include "obstacle.c"
 #include "player.c"
+#include "monster.c"
 
 // ===========================================================================
 // 		Funções
 // ===========================================================================
 
 void gameEntityUpdate(){
+	monsterUpdate();
 	playerUpdate();
 }
 
@@ -50,6 +58,7 @@ void gameEntityInit(){
 
 	mapCollidersInit();
 	playerInit();
+	monsterInit();
 
 }
 
