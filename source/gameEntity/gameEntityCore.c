@@ -20,13 +20,26 @@ enum {
 	DIR_NONE,
 };
 
+enum{
+	COLLISION_DIR_UP,
+	COLLISION_DIR_RIGHT,
+	COLLISION_DIR_DOWN,
+	COLLISION_DIR_LEFT,
+};
+
 typedef struct Entity{
 	float xPos;
 	float yPos;
 	float moveSpeed;
+	int xFollowOffset;
+	int yFollowOffset;
 	int moveDirection;
+	float angleMoveDirection;
+	int unfollowMoveXPos;
+	int unfollowMoveYPos;
 	Rectangle colideBox;
 	bool isAttacking;
+	bool isFollowing;
 	bool canAttack;
 	bool isVisible;
 	int life;

@@ -14,9 +14,16 @@
 // ===========================================================================
 
 const float MONSTER_MOVE_SPEED = 1.5f;
+const int MAX_MONSTER_MOVE_SPEED = 7;
+const int MIN_MONSTER_MOVE_SPEED = 5;
+const float MAX_MONSTER_FOLLOW_DISTANCE = 200.0;
+
+const int MIN_MONSTER_FOLLOW_OFFSET = -50;
+const int MAX_MONSTER_FOLLOW_OFFSET = 50;
 
 Entity monster[MAX_MONSTER];
 
+int monsterCollisionDirection[MAX_MONSTER][4];
 int monsterCount = 0;
 
 // ===========================================================================
@@ -33,39 +40,186 @@ void monsterInit(){
 				monster[monsterCount].xPos = j * TILE_SIZE;
 				monster[monsterCount].yPos = i * TILE_SIZE;
 				monster[monsterCount].moveDirection = DIR_NONE;
-				monster[monsterCount].moveSpeed = MONSTER_MOVE_SPEED;
+				monster[monsterCount].moveSpeed = (GetRandomValue(MIN_MONSTER_MOVE_SPEED, MAX_MONSTER_MOVE_SPEED))/10.0;
 				monster[monsterCount].isAttacking = false;
 				monster[monsterCount].canAttack = true;
 				monster[monsterCount].isVisible = true;
+				monster[monsterCount].isFollowing = false;
+				monster[monsterCount].unfollowMoveXPos = GetRandomValue(1, SCREEN_WIDTH);
+				monster[monsterCount].unfollowMoveYPos = GetRandomValue(1, SCREEN_HEIGHT);
+				monster[monsterCount].xFollowOffset = GetRandomValue(MIN_MONSTER_FOLLOW_OFFSET, MAX_MONSTER_FOLLOW_OFFSET);
+				monster[monsterCount].yFollowOffset = GetRandomValue(MIN_MONSTER_FOLLOW_OFFSET, MAX_MONSTER_FOLLOW_OFFSET);
+				
+				monsterCollisionDirection[monsterCount][COLLISION_DIR_UP] = false;
+				monsterCollisionDirection[monsterCount][COLLISION_DIR_DOWN] = false;
+				monsterCollisionDirection[monsterCount][COLLISION_DIR_LEFT] = false;
+				monsterCollisionDirection[monsterCount][COLLISION_DIR_RIGHT] = false;
+
 				monsterCount++;
 			}
+		}
+	}
+}
+
+void monsterDraw(int mid){
+
+	if(monster[mid].isVisible){
+	
+		Rectangle tempTex3 = {PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
+		DrawTextureRec(gameTextures[TXT_MONSTER_WALK], tempTex3, (Vector2){monster[mid].xPos - 5 , monster[mid].yPos - 3}, WHITE); 
+
+		Rectangle tempTex2 = {PLAYER_SPRITE_DIMENSION * 1, PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
+		DrawTextureRec(gameTextures[TXT_MONSTER_STATE], tempTex2, (Vector2){monster[mid].xPos - 5 , monster[mid].yPos -5}, WHITE); 
+	
+		if(monster[mid].isFollowing){
+			
+			Rectangle t3 = {PLAYER_SPRITE_DIMENSION * 1, PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};		
+			DrawTextureRec(gameTextures[TXT_MONSTER_FOLLOW_STATE], t3, (Vector2){monster[mid].xPos - 5 , monster[mid].yPos -5}, WHITE); 
+		}
+
+
+	}
+
+}
+
+
+void monsterCheckNewDirection(int mid){
+
+	if(monster[mid].isFollowing) return;
+
+
+	for(int i = 0; i < 4; i++){
+		if(monsterCollisionDirection[mid][monster[mid].moveDirection]){
+			monster[mid].unfollowMoveXPos = GetRandomValue(1, SCREEN_WIDTH);
+			monster[mid].unfollowMoveYPos = GetRandomValue(1, SCREEN_HEIGHT);
 		}
 	}
 
 }
 
-void monsterDraw(){
+void monsterUpdateMoveDirection(int mid){
+    
+    if(!monster[mid].isFollowing){
+		monster[mid].angleMoveDirection = getAngleBetweenPoints(monster[mid].xPos+30, monster[mid].yPos+30, monster[mid].unfollowMoveXPos, monster[mid].unfollowMoveYPos);
+   		//DrawLineV((Vector2){monster[4].xPos+30, monster[4].yPos+30}, (Vector2){monster[4].unfollowMoveXPos, monster[4].unfollowMoveYPos}, RED);
+    }
+	else{
+		monster[mid].angleMoveDirection = getAngleBetweenPoints(monster[mid].xPos+30, monster[mid].yPos+30, player.xPos+30, player.yPos+30);
+		//DrawLineV((Vector2){monster[4].xPos+30, monster[4].yPos+30}, (Vector2){player.xPos+30, player.yPos+30}, RED);
+	}
 
-	for(int i = 0; i < monsterCount; i++){
+	//DrawLineV((Vector2){monster[4].xPos, monster[4].yPos}, (Vector2){SCREEN_WIDTH/2, SCREEN_HEIGHT/2}, RED);
+	//TraceLog(LOG_INFO, "ANGLE: %f", monster[4].angleMoveDirection);
 
-		if(monster[i].isVisible){
-		
-			Rectangle tempTex3 = {PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
-			DrawTextureRec(gameTextures[TXT_MONSTER_WALK], tempTex3, (Vector2){monster[i].xPos - 5 , monster[i].yPos - 3}, WHITE); 
+	if((monster[mid].angleMoveDirection > 0 && monster[mid].angleMoveDirection < 45) || (monster[mid].angleMoveDirection > 315 && monster[mid].angleMoveDirection < 350)){
+		monster[mid].moveDirection = DIR_RIGHT;
+		//TraceLog(LOG_INFO, "RIGHT: %f", monster[mid].angleMoveDirection);
+	}
+	if((monster[mid].angleMoveDirection > 45 && monster[mid].angleMoveDirection < 135)){
+		monster[mid].moveDirection = DIR_DOWN;
+		//TraceLog(LOG_INFO, "DOWN: %f", monster[mid].angleMoveDirection);
+	}
+	if((monster[mid].angleMoveDirection > 135 && monster[mid].angleMoveDirection < 225)){
+		monster[mid].moveDirection = DIR_LEFT;
+		//TraceLog(LOG_INFO, "LEFT: %f", monster[mid].angleMoveDirection);
+	}
+	if((monster[mid].angleMoveDirection > 225 && monster[mid].angleMoveDirection < 315)){
+		monster[mid].moveDirection = DIR_UP;
+		//TraceLog(LOG_INFO, "UP: %f", monster[4].angleMoveDirection);
+	}
 
-			Rectangle tempTex2 = {PLAYER_SPRITE_DIMENSION * 1, PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
-			DrawTextureRec(gameTextures[TXT_MONSTER_STATE], tempTex2, (Vector2){monster[i].xPos - 5 , monster[i].yPos -5}, WHITE); 
-		
+}
 
-		}
+bool monsterCheckCollisions(int mid){
+
+	if(monster[mid].moveDirection == DIR_UP && ((monster[mid].yPos - monster[mid].moveSpeed) < 0)){
+		monsterCollisionDirection[mid][COLLISION_DIR_UP] = true;
+	} else monsterCollisionDirection[mid][COLLISION_DIR_UP] = false;
+
+	if(monster[mid].moveDirection == DIR_DOWN && ((monster[mid].yPos + monster[mid].moveSpeed + TILE_SIZE) > SCREEN_HEIGHT)){
+		monsterCollisionDirection[mid][COLLISION_DIR_DOWN] = true;
+	} else monsterCollisionDirection[mid][COLLISION_DIR_DOWN] = false;
+	
+	if(monster[mid].moveDirection == DIR_RIGHT && ((monster[mid].xPos + monster[mid].moveSpeed + TILE_SIZE) > SCREEN_WIDTH)){
+		monsterCollisionDirection[mid][COLLISION_DIR_RIGHT] = true;
+	} else monsterCollisionDirection[mid][COLLISION_DIR_RIGHT] = false;
+
+	if(monster[mid].moveDirection == DIR_LEFT && ((monster[mid].xPos - monster[mid].moveSpeed) < 0)){
+		monsterCollisionDirection[mid][COLLISION_DIR_LEFT] = true;
+	} else monsterCollisionDirection[mid][COLLISION_DIR_LEFT] = false;
+
+	// Checa a colisão dos objetos
+	for(int i = 0; i <= obstacleAmount; i++){
+
+		if(monster[mid].moveDirection == DIR_UP && CheckCollisionRecs(mapObstacle[i], (Rectangle){monster[mid].xPos + 18, monster[mid].yPos + 20-monster[mid].moveSpeed, 15, 25})) monsterCollisionDirection[mid][COLLISION_DIR_UP] = true;
+	
+		if(monster[mid].moveDirection == DIR_DOWN && CheckCollisionRecs(mapObstacle[i], (Rectangle){monster[mid].xPos + 18, monster[mid].yPos + 20+monster[mid].moveSpeed, 15, 25})) monsterCollisionDirection[mid][COLLISION_DIR_DOWN] = true;
+
+		if(monster[mid].moveDirection == DIR_RIGHT && CheckCollisionRecs(mapObstacle[i], (Rectangle){monster[mid].xPos + 18+monster[mid].moveSpeed,  monster[mid].yPos + 20, 15, 25})) monsterCollisionDirection[mid][COLLISION_DIR_RIGHT] = true;
+
+		if(monster[mid].moveDirection == DIR_LEFT && CheckCollisionRecs(mapObstacle[i], (Rectangle){monster[mid].xPos + 18-monster[mid].moveSpeed,  monster[mid].yPos + 20, 15, 25})) monsterCollisionDirection[mid][COLLISION_DIR_LEFT] = true;
 
 	}
 
+	if(monster[mid].moveDirection == DIR_UP && monsterCollisionDirection[mid][COLLISION_DIR_UP]) return true;
+	if(monster[mid].moveDirection == DIR_DOWN && monsterCollisionDirection[mid][COLLISION_DIR_DOWN]) return true;
+	if(monster[mid].moveDirection == DIR_LEFT && monsterCollisionDirection[mid][COLLISION_DIR_LEFT]) return true;
+	if(monster[mid].moveDirection == DIR_RIGHT && monsterCollisionDirection[mid][COLLISION_DIR_RIGHT]) return true;
+
+	return false;
+
+}
+
+bool monsterMove(int mid){
+
+	monsterCheckNewDirection(mid);
+
+	if(getDistanceBetweenPoints(monster[mid].xPos+30, monster[mid].yPos+30, player.xPos+30+monster[mid].xFollowOffset, player.yPos+30+monster[mid].yFollowOffset) > MAX_MONSTER_FOLLOW_DISTANCE){
+		
+		monster[mid].isFollowing = false;
+
+		if(getDistanceBetweenPoints(monster[mid].xPos+30, monster[mid].yPos+30, monster[mid].unfollowMoveXPos, monster[mid].unfollowMoveYPos) < 100){
+			monster[mid].unfollowMoveXPos = GetRandomValue(1, SCREEN_WIDTH);
+			monster[mid].unfollowMoveYPos = GetRandomValue(1, SCREEN_HEIGHT);
+		}
+
+		double angulo = getAngleBetweenPoints(monster[mid].xPos+30, monster[mid].yPos+30, monster[mid].unfollowMoveXPos, monster[mid].unfollowMoveYPos);
+		
+		Vector2 newPos = getVectorByAngleDistance(angulo, monster[mid].moveSpeed);
+
+		if(monsterCheckCollisions(mid)) return false;
+
+		monster[mid].xPos += newPos.x;
+		monster[mid].yPos += newPos.y;
+
+	}
+	else{
+		
+		monster[mid].isFollowing = true;
+
+		double angulo = getAngleBetweenPoints(monster[mid].xPos+30, monster[mid].yPos+30, player.xPos+30+monster[mid].xFollowOffset, player.yPos+30+monster[mid].yFollowOffset);
+		
+		Vector2 newPos = getVectorByAngleDistance(angulo, monster[mid].moveSpeed);
+	
+		if(monsterCheckCollisions(mid)) return false;
+
+		monster[mid].xPos += newPos.x;
+		monster[mid].yPos += newPos.y;
+
+	}
+
+	return true;
 
 }
 
 void monsterUpdate(){
 
-	monsterDraw();
+	for(int i = 0; i < monsterCount; i++){
+		monsterUpdateMoveDirection(i);
+		monsterMove(i);
+		monsterDraw(i);
+
+	}
+
 
 }

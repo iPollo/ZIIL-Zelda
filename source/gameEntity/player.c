@@ -11,6 +11,7 @@
 #define WALK_ANIM_FRAME_SPEED 5
 #define PLAYER_ATTACK_COLDOWN 8
 #define MAX_PLAYER_LIFES 3
+#define ATTACK_ANIM_FRAME_SPEED 3
 
 #define COLLOR_TEXT  CLITERAL(Color){ 255, 234, 117, 255 }
 
@@ -23,6 +24,7 @@ const float PLAYER_NORMALIZED_MOVE_SPEED = 1.2f;
 const int PLAYER_SPRITE_DIMENSION = 65;
 
 int ANIMFRAME_walk = 0; 
+int ANIMFRAME_attack = 0;
 
 int walkAnimSpriteIndex = 0;
 int attackAnimSpriteIndex = 0;
@@ -32,13 +34,6 @@ int playerColDownAttack = 0;
 Entity player;
 
 bool collisionDirections[4];
-
-enum{
-	COLLISION_DIR_UP,
-	COLLISION_DIR_DOWN,
-	COLLISION_DIR_LEFT,
-	COLLISION_DIR_RIGHT,
-};
 
 // ===========================================================================
 // 		Funções
@@ -87,8 +82,6 @@ void playerDrawHud(){
 	DrawText(TextFormat("10"), 79, 130, 15, COLLOR_TEXT); 
 	//DrawText(TextFormat("SCORE: 10"), 80+1, 185+1, 15, BLACK);  
 	DrawText(TextFormat("1"), 79, 183, 15, COLLOR_TEXT); 
-
-
 }
 
 void playerDraw(){
@@ -124,7 +117,7 @@ void playerDraw(){
 
 
 	// For Debug
-	//DrawRectangle(player.xPos, player.yPos, 50, 50, RED);
+	//DrawRectangle(player.xPos + 18, player.yPos + 20, 15, 25, RED);
 	for(int i = 0; i <= obstacleAmount; i++){
 		//DrawRectangleRec(mapObstacle[i], BLUE);
 	}
@@ -152,15 +145,15 @@ void playerCheckCollisions(){
 
 	
 	// Checa a colisão dos objetos
-	for(int i = 0; i <= obstacleAmount; i++){
+	for(int i = 0; i <= obstacleAmount; i++){ //player.xPos + 18, player.yPos + 20, 15, 25
 
-		if(IsKeyDown(KEY_W) && CheckCollisionRecs(mapObstacle[i], (Rectangle){player.xPos, player.yPos-player.moveSpeed, 50, 50})) collisionDirections[COLLISION_DIR_UP] = true;
+		if(IsKeyDown(KEY_W) && CheckCollisionRecs(mapObstacle[i], (Rectangle){player.xPos + 18, player.yPos + 20-player.moveSpeed, 15, 25})) collisionDirections[COLLISION_DIR_UP] = true;
 	
-		if(IsKeyDown(KEY_S) && CheckCollisionRecs(mapObstacle[i], (Rectangle){player.xPos, player.yPos+player.moveSpeed, 50, 50})) collisionDirections[COLLISION_DIR_DOWN] = true;
+		if(IsKeyDown(KEY_S) && CheckCollisionRecs(mapObstacle[i], (Rectangle){player.xPos + 18, player.yPos + 20+player.moveSpeed, 15, 25})) collisionDirections[COLLISION_DIR_DOWN] = true;
 
-		if(IsKeyDown(KEY_D) && CheckCollisionRecs(mapObstacle[i], (Rectangle){player.xPos+player.moveSpeed, player.yPos, 50, 50})) collisionDirections[COLLISION_DIR_RIGHT] = true;
+		if(IsKeyDown(KEY_D) && CheckCollisionRecs(mapObstacle[i], (Rectangle){player.xPos + 18+player.moveSpeed,  player.yPos + 20, 15, 25})) collisionDirections[COLLISION_DIR_RIGHT] = true;
 
-		if(IsKeyDown(KEY_A) && CheckCollisionRecs(mapObstacle[i], (Rectangle){player.xPos-player.moveSpeed, player.yPos, 50, 50})) collisionDirections[COLLISION_DIR_LEFT] = true;
+		if(IsKeyDown(KEY_A) && CheckCollisionRecs(mapObstacle[i], (Rectangle){player.xPos + 18-player.moveSpeed,  player.yPos + 20, 15, 25})) collisionDirections[COLLISION_DIR_LEFT] = true;
 
 	}
 }
@@ -174,11 +167,7 @@ void playerUpdateMoveDirection(){
 
 	if(IsKeyDown(KEY_A)) player.moveDirection = DIR_LEFT;
 	else if(IsKeyDown(KEY_D)) player.moveDirection = DIR_RIGHT;
-
 }
-
-int ANIMFRAME_attack = 0;
-#define ATTACK_ANIM_FRAME_SPEED 3
 
 bool playerProcessAttack(){
 

@@ -43,6 +43,7 @@ int startGame();
 // ===========================================================================
 
 #include "tempMap.c"
+#include "gameUtil/mathFuncs.c"
 #include "gameTextures/gameTexturesCore.c"
 #include "gameData/gameDataCore.c"
 #include "gameEntity/gameEntityCore.c"
