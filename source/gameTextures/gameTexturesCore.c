@@ -27,6 +27,8 @@ enum{
     TXT_HUD_LIFEBAR,
     TXT_HUD_SCOREBACK,
     TXT_MONSTER_FOLLOW_STATE,
+    TXT_MONSTER_HIT_STATE,
+    TXT_MONSTER_LIFE_SPRITESHEET,
 };
 
 Texture2D gameTextures[MAX_GAME_TEXTURES];
@@ -51,6 +53,8 @@ void gameTexturesInit(){
 	gameTextures[TXT_HUD_LIFEBAR] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_HUD_LIFEBAR.png");
 	gameTextures[TXT_HUD_SCOREBACK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_HUD_SCOREBACK.png");
 	gameTextures[TXT_MONSTER_FOLLOW_STATE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_FOLLOW_STATE_SPRITESHEET.png");
+	gameTextures[TXT_MONSTER_HIT_STATE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_HITSTATE_SPRITESHEET.png");
+	gameTextures[TXT_MONSTER_LIFE_SPRITESHEET] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_LIFE_SPRITESHEET.png");
 
 }
 

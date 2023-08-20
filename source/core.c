@@ -25,7 +25,7 @@
 // ===========================================================================
 
 // Janela Principal
-const int SCREEN_WIDTH = 1200;
+const int SCREEN_WIDTH = 1200;  
 const int SCREEN_HEIGHT = 800;
 const int START_SCREEN_DIMENSION = 650;
 const int TILE_SIZE = 50;

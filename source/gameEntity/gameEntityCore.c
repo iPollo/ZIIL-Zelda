@@ -38,11 +38,15 @@ typedef struct Entity{
 	int unfollowMoveXPos;
 	int unfollowMoveYPos;
 	Rectangle colideBox;
+	Rectangle attackHitBox;
 	bool isAttacking;
+	bool isBeingHited;
+	int animframe_hit;
 	bool isFollowing;
 	bool canAttack;
 	bool isVisible;
 	int life;
+	int hits;
 	int score;
 	int level;
 

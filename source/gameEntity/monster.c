@@ -8,12 +8,16 @@
 // ===========================================================================
 
 #define MAX_MONSTER 50
+#define MAX_MONSTER_LIFE 3
+#define MONSTER_WALK_ANIM_FRAME_SPEED 40
+#define MONSTER_HIT_ANIM_FRAME_SPEED 10
 
 // ===========================================================================
 // 		Variáveis
 // ===========================================================================
 
 const float MONSTER_MOVE_SPEED = 1.5f;
+const float MONSTER_HITBOX_DISTANCE = 80.0f;
 const int MAX_MONSTER_MOVE_SPEED = 7;
 const int MIN_MONSTER_MOVE_SPEED = 5;
 const float MAX_MONSTER_FOLLOW_DISTANCE = 200.0;
@@ -31,6 +35,11 @@ int monsterCount = 0;
 // ===========================================================================
 
 
+int ANIMFRAME_monsterWalk = 0;
+int ANIMFRAME_monsterHited = 0;
+int monsterWalkSpriteIndex = 0;
+
+
 void monsterInit(){
 
 
@@ -45,6 +54,8 @@ void monsterInit(){
 				monster[monsterCount].canAttack = true;
 				monster[monsterCount].isVisible = true;
 				monster[monsterCount].isFollowing = false;
+				monster[monsterCount].life = MAX_MONSTER_LIFE;
+				monster[monsterCount].hits = 0;
 				monster[monsterCount].unfollowMoveXPos = GetRandomValue(1, SCREEN_WIDTH);
 				monster[monsterCount].unfollowMoveYPos = GetRandomValue(1, SCREEN_HEIGHT);
 				monster[monsterCount].xFollowOffset = GetRandomValue(MIN_MONSTER_FOLLOW_OFFSET, MAX_MONSTER_FOLLOW_OFFSET);
@@ -64,24 +75,55 @@ void monsterInit(){
 void monsterDraw(int mid){
 
 	if(monster[mid].isVisible){
-	
-		Rectangle tempTex3 = {PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
+
+			// Anim do movimento dos pés
+		ANIMFRAME_monsterWalk++;
+
+		if(ANIMFRAME_monsterWalk >= MONSTER_WALK_ANIM_FRAME_SPEED){
+			if(monsterWalkSpriteIndex > 3) monsterWalkSpriteIndex = 0; 
+			monsterWalkSpriteIndex++;
+			ANIMFRAME_monsterWalk = 0;
+		}
+
+
+		// Desenha cada elemento
+
+		Rectangle tempTex3 = {PLAYER_SPRITE_DIMENSION * monsterWalkSpriteIndex, PLAYER_SPRITE_DIMENSION * 1, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
 		DrawTextureRec(gameTextures[TXT_MONSTER_WALK], tempTex3, (Vector2){monster[mid].xPos - 5 , monster[mid].yPos - 3}, WHITE); 
 
-		Rectangle tempTex2 = {PLAYER_SPRITE_DIMENSION * 1, PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
-		DrawTextureRec(gameTextures[TXT_MONSTER_STATE], tempTex2, (Vector2){monster[mid].xPos - 5 , monster[mid].yPos -5}, WHITE); 
+
+		if(monster[mid].isBeingHited){
+			monster[mid].animframe_hit++;
+
+			if(monster[mid].animframe_hit++ > MONSTER_HIT_ANIM_FRAME_SPEED){
+				monster[mid].animframe_hit = 0;
+				monster[mid].isBeingHited = false;
+			}
+
+			Rectangle tt3 = {PLAYER_SPRITE_DIMENSION * monster[mid].moveDirection, PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
+			DrawTextureRec(gameTextures[TXT_MONSTER_HIT_STATE], tt3, (Vector2){monster[mid].xPos - 5 , monster[mid].yPos -5}, WHITE); 
 	
-		if(monster[mid].isFollowing){
+
+		}
+		else{
+			Rectangle tempTex2 = {PLAYER_SPRITE_DIMENSION * monster[mid].moveDirection, PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};
+			DrawTextureRec(gameTextures[TXT_MONSTER_STATE], tempTex2, (Vector2){monster[mid].xPos - 5 , monster[mid].yPos -5}, WHITE); 
+	
+			DrawTexturePro(gameTextures[TXT_MONSTER_LIFE_SPRITESHEET], (Rectangle){0,286 * (monster[mid].hits-3*-1),1051,286}, (Rectangle){monster[mid].xPos + 5, monster[mid].yPos - 10, 37, 10}, (Vector2){0,0},0, WHITE);
 			
-			Rectangle t3 = {PLAYER_SPRITE_DIMENSION * 1, PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};		
-			DrawTextureRec(gameTextures[TXT_MONSTER_FOLLOW_STATE], t3, (Vector2){monster[mid].xPos - 5 , monster[mid].yPos -5}, WHITE); 
+			if(monster[mid].isFollowing){
+				
+
+				Rectangle t3 = {PLAYER_SPRITE_DIMENSION * monster[mid].moveDirection, PLAYER_SPRITE_DIMENSION * 0, PLAYER_SPRITE_DIMENSION, PLAYER_SPRITE_DIMENSION};		
+				DrawTextureRec(gameTextures[TXT_MONSTER_FOLLOW_STATE], t3, (Vector2){monster[mid].xPos - 5 , monster[mid].yPos -5}, WHITE); 
+			}
+
+
 		}
 
 
 	}
-
 }
-
 
 void monsterCheckNewDirection(int mid){
 
@@ -170,6 +212,37 @@ bool monsterCheckCollisions(int mid){
 
 }
 
+
+void monsterCheckIfPlayerHit(int mid){
+
+	double distance = getDistanceBetweenPoints(player.xPos, player.yPos, monster[mid].xPos, monster[mid].yPos);
+
+	bool isHitable = CheckCollisionRecs(player.attackHitBox, (Rectangle){monster[mid].xPos + 18, monster[mid].yPos + 20, 15, 25});
+
+	if(IsKeyPressed(KEY_J) && (isHitable)){
+		monster[mid].isBeingHited = true;
+		monster[mid].animframe_hit = 0;
+		monster[mid].hits++;
+
+		if(monster[mid].hits == MAX_MONSTER_LIFE){
+			monster[mid].isVisible = false;
+		}
+
+	
+		double angulo = getAngleBetweenPoints(monster[mid].xPos+30, monster[mid].yPos+30, player.xPos+30+monster[mid].xFollowOffset, player.yPos+30+monster[mid].yFollowOffset);
+		
+		Vector2 newPos = getVectorByAngleDistance(angulo, (monster[mid].moveSpeed) * -2);
+	
+
+		//if(monsterCheckCollisions(mid)) return false;
+
+		monster[mid].xPos += newPos.x;
+		monster[mid].yPos += newPos.y;
+
+	}
+}
+
+
 bool monsterMove(int mid){
 
 	monsterCheckNewDirection(mid);
@@ -217,6 +290,7 @@ void monsterUpdate(){
 	for(int i = 0; i < monsterCount; i++){
 		monsterUpdateMoveDirection(i);
 		monsterMove(i);
+		monsterCheckIfPlayerHit(i);
 		monsterDraw(i);
 
 	}

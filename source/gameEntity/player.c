@@ -14,6 +14,7 @@
 #define ATTACK_ANIM_FRAME_SPEED 3
 
 #define COLLOR_TEXT  CLITERAL(Color){ 255, 234, 117, 255 }
+#define COLLOR_HITBOX  CLITERAL(Color){ 255, 0, 0, 200 }
 
 // ===========================================================================
 // 		Variáveis
@@ -161,12 +162,29 @@ void playerCheckCollisions(){
 
 void playerUpdateMoveDirection(){
 
-
 	if(IsKeyDown(KEY_W)) player.moveDirection = DIR_UP;
 	else if(IsKeyDown(KEY_S)) player.moveDirection = DIR_DOWN;
 
 	if(IsKeyDown(KEY_A)) player.moveDirection = DIR_LEFT;
 	else if(IsKeyDown(KEY_D)) player.moveDirection = DIR_RIGHT;
+
+
+	if(player.moveDirection == DIR_UP){
+		player.attackHitBox = (Rectangle){player.xPos-7, player.yPos-50, 70, 80};
+	}
+	else if(player.moveDirection == DIR_DOWN){
+		player.attackHitBox = (Rectangle){player.xPos-7, player.yPos+30, 70, 80};	
+	}
+	else if(player.moveDirection == DIR_LEFT){
+		player.attackHitBox = (Rectangle){player.xPos-50, player.yPos-10, 80, 70};	
+	}
+	else if(player.moveDirection == DIR_RIGHT){
+		player.attackHitBox = (Rectangle){player.xPos+25, player.yPos-10, 80, 70};
+	}
+
+	//DrawRectangleRec(player.attackHitBox, COLLOR_HITBOX);  
+
+
 }
 
 bool playerProcessAttack(){
