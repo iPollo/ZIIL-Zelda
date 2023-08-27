@@ -29,6 +29,10 @@ enum{
     TXT_MONSTER_FOLLOW_STATE,
     TXT_MONSTER_HIT_STATE,
     TXT_MONSTER_LIFE_SPRITESHEET,
+    TXT_MONSTER_ATTACK,
+    TXT_MENU_BACKGROUND,
+    TXT_MENU_BUTTONS,
+    TXT_MENU_SCOREBOARD,
 };
 
 Texture2D gameTextures[MAX_GAME_TEXTURES];
@@ -55,6 +59,12 @@ void gameTexturesInit(){
 	gameTextures[TXT_MONSTER_FOLLOW_STATE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_FOLLOW_STATE_SPRITESHEET.png");
 	gameTextures[TXT_MONSTER_HIT_STATE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_HITSTATE_SPRITESHEET.png");
 	gameTextures[TXT_MONSTER_LIFE_SPRITESHEET] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_LIFE_SPRITESHEET.png");
+	gameTextures[TXT_MONSTER_ATTACK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_ATTACK_SPRITESHEET.png");
+	gameTextures[TXT_MENU_BACKGROUND] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MENU_BACKGROUND.png");
+	gameTextures[TXT_MENU_BUTTONS] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MENU_BUTTON_SPRITESHEET.png");
+	gameTextures[TXT_MENU_SCOREBOARD] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MENU_SCOREBOARD.png");
+
+
 
 }
 
@@ -76,6 +86,9 @@ void drawMap(){
 
 // Atualiza no main loop
 void gameTexturesUpdate(){
+
+	if(!isGameRunning) return;
+
 
 	drawMap();
 

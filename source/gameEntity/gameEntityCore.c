@@ -12,6 +12,8 @@
 // 		Variáveis
 // ===========================================================================
 
+void resetMapConfigs();
+
 enum {
 	DIR_UP,
 	DIR_RIGHT,
@@ -42,6 +44,9 @@ typedef struct Entity{
 	bool isAttacking;
 	bool isBeingHited;
 	int animframe_hit;
+	int animframe_attack;
+	int attackSpriteIndex;
+	Vector2 originalPosition;
 	bool isFollowing;
 	bool canAttack;
 	bool isVisible;
@@ -67,17 +72,31 @@ typedef struct Entity{
 // ===========================================================================
 
 void gameEntityUpdate(){
+
+	if(!isGameRunning) return;
+
 	monsterUpdate();
 	playerUpdate();
 }
 
 void gameEntityInit(){
-
 	mapCollidersInit();
 	playerInit();
 	monsterInit();
+}
+
+void resetMapConfigs(){
+
+	player.xPos = player.originalPosition.x;
+	player.yPos = player.originalPosition.y;
+
+	for(int i = 0; i < monsterCount; i++){
+		monster[i].xPos = monster[i].originalPosition.x;
+		monster[i].yPos = monster[i].originalPosition.y;
+	}
 
 }
+
 
 
 

@@ -33,6 +33,7 @@ const int TILE_LINES = SCREEN_HEIGHT/TILE_SIZE;
 const int TILE_ROWS = SCREEN_WIDTH/TILE_SIZE;
     
 // Bool
+    
 bool isGameRunning = false;
 
 // Declarações Core
@@ -47,13 +48,15 @@ int startGame();
 #include "gameTextures/gameTexturesCore.c"
 #include "gameData/gameDataCore.c"
 #include "gameEntity/gameEntityCore.c"
+#include "gameEntity/gameMenu.c"
 
 // ===========================================================================
 // 		Core
 // ===========================================================================
 
 int main(void){
-	 
+	
+
 	// Inicializa a janela 
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "ZIIL - Zelda");
 	SetWindowPosition((GetMonitorWidth(GetCurrentMonitor())/2) - SCREEN_WIDTH/2, (GetMonitorHeight(GetCurrentMonitor())/2 - SCREEN_HEIGHT/2)+ 50);
@@ -64,6 +67,8 @@ int main(void){
 	gameTexturesInit();
 	gameDataInit();
 	gameEntityInit();
+	gameMenuInit();
+    
 
 	// Carrega as informaçõeSSs salvas do jogosss
 	gameDataLoad();
@@ -81,8 +86,10 @@ int main(void){
         BeginDrawing();
 
         // Processa cada arquivo e suas dependências
+        gameMenuUpdate();
         gameTexturesUpdate();
         gameEntityUpdate();
+
 
         //Raylib end draw
         EndDrawing();

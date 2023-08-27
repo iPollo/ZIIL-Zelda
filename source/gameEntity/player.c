@@ -48,7 +48,11 @@ void playerInit(){
 	player.moveSpeed = PLAYER_MOVE_SPEED;
 	player.isAttacking = false;
 	player.canAttack = true;
-	player.life = 2;
+	player.originalPosition.x = player.xPos;
+	player.originalPosition.y = player.yPos;
+	player.life = 3;
+	player.score = 0;
+	player.level = 1;
 	//player.colideBox = {65}
 }
 
@@ -80,9 +84,9 @@ void playerDrawHud(){
 	}
 
 	//DrawText(TextFormat("SCORE: 10"), 80+1, 130+1, 15, BLACK);  
-	DrawText(TextFormat("10"), 79, 130, 15, COLLOR_TEXT); 
+	DrawText(TextFormat("%d", player.score), 79, 130, 15, COLLOR_TEXT); 
 	//DrawText(TextFormat("SCORE: 10"), 80+1, 185+1, 15, BLACK);  
-	DrawText(TextFormat("1"), 79, 183, 15, COLLOR_TEXT); 
+	DrawText(TextFormat("%d", player.level), 79, 183, 15, COLLOR_TEXT); 
 }
 
 void playerDraw(){
