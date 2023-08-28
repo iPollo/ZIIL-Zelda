@@ -74,10 +74,10 @@ void drawMap(){
 	// Desenha o plano de fundo
 	for(int i = 0; i < TILE_LINES; i++){
 		for(int j = 0; j < TILE_ROWS; j++){
-			if(MAP[i][j] == 'B' || MAP[i][j] == 'M'){
+			if(MAP[i][j] == 'B' || MAP[i][j] == 'O' || MAP[i][j] == 'M' || MAP[i][j] == 'J'){
 				DrawTexture(gameTextures[TXT_GROUND], j * TILE_SIZE, (i * TILE_SIZE), WHITE);
 			}
-			else if(MAP[i][j] == 'O'){
+			else if(MAP[i][j] == 'P'){
 				DrawTexture(gameTextures[TXT_ROCK], j * TILE_SIZE, i * TILE_SIZE, WHITE);
 			}
 		}

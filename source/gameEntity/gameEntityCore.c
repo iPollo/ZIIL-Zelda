@@ -79,9 +79,9 @@ void gameEntityUpdate(){
 	playerUpdate();
 }
 
-void gameEntityInit(){
+void gameEntityInit(bool resetData){
 	mapCollidersInit();
-	playerInit();
+	playerInit(resetData);
 	monsterInit();
 }
 

@@ -45,8 +45,43 @@ void gameMenuInit(){
 
 void gameMenuUpdate(){
 
-	if(isGameRunning || menuCurrentMenu != MENU_MAIN) return;
+	if(isGameRunning) return;
 
+
+	if(IsKeyPressed(KEY_ENTER)){
+		if((menuCurrentSelectedOption == OPTION_SCOREBOARD) && (menuCurrentMenu == MENU_MAIN)){
+			menuCurrentMenu = MENU_SCOREBOARD;
+		}
+		else if(menuCurrentMenu == MENU_SCOREBOARD) menuCurrentMenu = MENU_MAIN;
+
+	}
+
+
+	if(menuCurrentMenu != MENU_MAIN){
+
+		DrawTexture(gameTextures[TXT_MENU_SCOREBOARD], 0, 0, WHITE);  
+
+		for(int i = 0; i < 5; i++){
+
+			char name[16] = "Apollo";
+			char date[16] = "NIVEL 1";
+			char pts[16] = "1000 PTS";
+			int dateSize, ptsSize;
+
+			dateSize = MeasureText(date, 25);
+			ptsSize = MeasureText(pts, 25);
+
+			DrawText(TextFormat("%d.", i+1), 154, 378 + (64 * i), 25, WHITE);
+			DrawText(name, 180, 378 + (64 * i), 25, WHITE);
+			DrawText(date, 590 - dateSize/2, 378 + (64 * i), 25, WHITE);
+			DrawText(pts, 1042 - ptsSize, 378 + (64 * i), 25, WHITE);
+
+		}
+
+
+
+		return;
+	}
 
 	DrawTexture(gameTextures[TXT_MENU_BACKGROUND], 0, 0, WHITE);  
 	DrawTexturePro(gameTextures[TXT_MENU_BUTTONS], (Rectangle){0,0,500,150}, (Rectangle){90, 439, 500,150}, (Vector2){0,0},0, WHITE);
@@ -64,11 +99,11 @@ void gameMenuUpdate(){
 	if(IsKeyPressed(KEY_LEFT)){
 		menuCurrentSelectedOption--;
 		if(menuCurrentSelectedOption == -1){
-			TraceLog(LOG_INFO, "cu");
 			menuCurrentSelectedOption = 3;
 		}
 	}
-
-
-
+	if(IsKeyPressed(KEY_ENTER)){
+		if(menuCurrentSelectedOption == OPTION_SAIR) CloseWindow();
+		else if(menuCurrentSelectedOption == OPTION_START) startGame();
+	}
 }

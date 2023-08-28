@@ -42,10 +42,11 @@ int monsterCount = 0;
 
 void monsterInit(){
 
+	monsterCount = 0;
 
 	for(int i = 0; i < TILE_LINES; i++){
 		for(int j = 0; j < TILE_ROWS; j++){
-			if(MAP[i][j] == 'M'){
+			if(MAP[i][j] == 'O'){
 				monster[monsterCount].xPos = j * TILE_SIZE;
 				monster[monsterCount].yPos = i * TILE_SIZE;
 				monster[monsterCount].moveDirection = DIR_NONE;
@@ -231,7 +232,7 @@ void monsterCheckIfPlayerHit(int mid){
 
 	bool isHitable = CheckCollisionRecs(player.attackHitBox, (Rectangle){monster[mid].xPos + 18, monster[mid].yPos + 20, 15, 25});
 
-	if(IsKeyPressed(KEY_J) && (isHitable)){
+	if(IsKeyPressed(KEY_J) && (isHitable) && player.canAttack){
 		monster[mid].isBeingHited = true;
 		monster[mid].animframe_hit = 0;
 		monster[mid].hits++;
@@ -265,9 +266,14 @@ void monsterCheckIfHitPlayer(int mid){
 		player.life--;
 		resetMapConfigs();
 	}
+}
 
+bool monsterCheckIfAllDie(){
+	for(int i = 0; i < monsterCount; i++){
+		if(monster[i].isVisible) return false;
+	}
 
-
+	return true;
 }
 
 bool monsterMove(int mid){
@@ -319,6 +325,10 @@ void monsterUpdate(){
 		monsterCheckIfPlayerHit(i);
 		monsterCheckIfHitPlayer(i);
 		monsterDraw(i);
+	}
 
+	if(monsterCheckIfAllDie()){
+		loadNewLevel(player.level);
+		player.level++;
 	}
 }

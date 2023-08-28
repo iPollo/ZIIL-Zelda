@@ -7,37 +7,46 @@
 //
 // ===========================================================================
 
-#define MAX_MAP_OBSTACLE 256
-
 // ===========================================================================
-// 		Variáveis
+// 		Imports e Includes Globas
 // ===========================================================================
 
-Rectangle mapObstacle[MAX_MAP_OBSTACLE];
-
-int obstacleAmount = -1;
 
 // ===========================================================================
-// 		Inicializa as collides das rochas (arbustos)
+// 		Funções
 // ===========================================================================
 
-// Defini a caixa de colisão de cada objeto do mapa
-void mapCollidersInit(){
+void loadNewLevel(int playerCurrentLevel){
 
-	obstacleAmount = -1;
+	int newLevel = playerCurrentLevel + 1;
+	int rowCount = 0, lineCount = 0;
 
-	for(int i = 0; i < TILE_LINES; i++){
-		for(int j = 0; j < TILE_ROWS; j++){
-			if(MAP[i][j] == 'P'){
-                obstacleAmount++;
-                mapObstacle[obstacleAmount].x = j * TILE_SIZE;
-                mapObstacle[obstacleAmount].y = i * TILE_SIZE;
-                mapObstacle[obstacleAmount].width = TILE_SIZE;
-                mapObstacle[obstacleAmount].height = TILE_SIZE;
-			}
-		}
-	}
+	const char *levelFileName = TextFormat("gameLevels/nivel%d.txt", newLevel);
 
+    FILE *fp = fopen(levelFileName, "r");
+
+    if (fp == NULL)
+    {
+        CloseWindow();
+        return;
+    }
+
+    char ch;
+    while ((ch = fgetc(fp)) != EOF){
+
+    	if(rowCount > TILE_ROWS){
+    		rowCount = 0;
+    		lineCount++;
+    	}
+
+    	MAP[lineCount][rowCount] = ch;
+
+    	rowCount++;
+    }
+
+    // close the file
+    fclose(fp);
+
+    gameEntityInit(playerCurrentLevel == 0);
 }
-
 

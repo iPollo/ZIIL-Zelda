@@ -9,7 +9,7 @@
 
 
 #define WALK_ANIM_FRAME_SPEED 5
-#define PLAYER_ATTACK_COLDOWN 8
+#define PLAYER_ATTACK_COLDOWN 20
 #define MAX_PLAYER_LIFES 3
 #define ATTACK_ANIM_FRAME_SPEED 3
 
@@ -40,20 +40,31 @@ bool collisionDirections[4];
 // 		Funções
 // ===========================================================================
 
-void playerInit(){
+void playerInit(bool resetData){
 
-	player.xPos = 0;
-	player.yPos = 0;
+	for(int i = 0; i < TILE_LINES; i++){
+		for(int j = 0; j < TILE_ROWS; j++){
+			if(MAP[i][j] == 'J'){
+				DrawTexture(gameTextures[TXT_GROUND], j * TILE_SIZE, (i * TILE_SIZE), WHITE);
+				player.xPos = j*TILE_SIZE;
+				player.yPos = i*TILE_SIZE;
+			}
+		}
+	}
+
+
 	player.moveDirection = DIR_NONE;
 	player.moveSpeed = PLAYER_MOVE_SPEED;
-	player.isAttacking = false;
-	player.canAttack = true;
 	player.originalPosition.x = player.xPos;
 	player.originalPosition.y = player.yPos;
+
+	if(!resetData) return;
+
+	player.isAttacking = false;
+	player.canAttack = true;
 	player.life = 3;
 	player.score = 0;
 	player.level = 1;
-	//player.colideBox = {65}
 }
 
 bool isPlayerMoving(){
