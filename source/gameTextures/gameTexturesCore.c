@@ -33,6 +33,7 @@ enum{
     TXT_MENU_BACKGROUND,
     TXT_MENU_BUTTONS,
     TXT_MENU_SCOREBOARD,
+    TXT_MENU_GAMEOVER,
 };
 
 Texture2D gameTextures[MAX_GAME_TEXTURES];
@@ -63,8 +64,7 @@ void gameTexturesInit(){
 	gameTextures[TXT_MENU_BACKGROUND] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MENU_BACKGROUND.png");
 	gameTextures[TXT_MENU_BUTTONS] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MENU_BUTTON_SPRITESHEET.png");
 	gameTextures[TXT_MENU_SCOREBOARD] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MENU_SCOREBOARD.png");
-
-
+	gameTextures[TXT_MENU_GAMEOVER] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/GAMEOVER_SCREEN.png");
 
 }
 

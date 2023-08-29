@@ -174,7 +174,6 @@ void playerCheckCollisions(){
 	}
 }
 
-
 void playerUpdateMoveDirection(){
 
 	if(IsKeyDown(KEY_W)) player.moveDirection = DIR_UP;
@@ -198,8 +197,6 @@ void playerUpdateMoveDirection(){
 	}
 
 	//DrawRectangleRec(player.attackHitBox, COLLOR_HITBOX);  
-
-
 }
 
 bool playerProcessAttack(){
@@ -280,7 +277,6 @@ bool playerProcessAttack(){
 
 
     return false;
-
 }
 
 bool playerProcessMovement(){
@@ -322,7 +318,22 @@ bool playerProcessMovement(){
     return false;
 }
 
+void playerResetData(){
+	player.moveDirection = DIR_NONE;
+	player.moveSpeed = PLAYER_MOVE_SPEED;
+	player.originalPosition.x = player.xPos;
+	player.originalPosition.y = player.yPos;
+	player.isAttacking = false;
+	player.canAttack = true;
+	player.life = 3;
+	player.score = 0;
+	player.level = 1;
+}
+
 void playerUpdate(){
+
+	if(isGameOver) return;
+
 	playerProcessMovement();
 	playerProcessAttack();
 	playerDraw();

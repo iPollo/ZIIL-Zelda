@@ -36,10 +36,12 @@ char MAP[16][24];
 // Bool
     
 bool isGameRunning = false;
+bool isGameOver = false;
 
 // Declarações Core
 int startGame();
 void loadNewLevel(int playerCurrentLevel);
+void gameLevelGameOver();
 
 // ===========================================================================
 // 		Dependencias do jogo
@@ -74,8 +76,9 @@ int main(void){
 	gameMenuInit();
     
 
-	// Carrega as informaçõeSSs salvas do jogosss
+	// Carrega as informaçõeSSs salvas do jogos e o scoreboard
 	gameDataLoad();
+	gameLevelLoadScoreboard();
 
 	// Inicia mostrando o menu inicialssss
    
@@ -93,6 +96,7 @@ int main(void){
         gameMenuUpdate();
         gameTexturesUpdate();
         gameEntityUpdate();
+        gameLevelUpdate();
 
         //Raylib end draw
         EndDrawing();
@@ -105,8 +109,12 @@ int startGame(){
 
 	SetWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	SetWindowPosition((GetMonitorWidth(GetCurrentMonitor())/2) - SCREEN_WIDTH/2, GetMonitorHeight(GetCurrentMonitor())/2 - SCREEN_HEIGHT/2);
+	loadNewLevel(0);
 
 	isGameRunning = true;
+	isGameOver = false;
+
+
 
 	return 1;
 }

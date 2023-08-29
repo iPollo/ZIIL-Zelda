@@ -45,7 +45,7 @@ void gameMenuInit(){
 
 void gameMenuUpdate(){
 
-	if(isGameRunning) return;
+	if(isGameRunning || isGameOver) return;
 
 
 	if(IsKeyPressed(KEY_ENTER)){

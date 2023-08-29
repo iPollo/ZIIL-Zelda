@@ -73,16 +73,16 @@ typedef struct Entity{
 
 void gameEntityUpdate(){
 
-	if(!isGameRunning) return;
+	if(!isGameRunning || isGameOver) return;
 
 	monsterUpdate();
 	playerUpdate();
 }
 
 void gameEntityInit(bool resetData){
-	mapCollidersInit();
 	playerInit(resetData);
 	monsterInit();
+	mapCollidersInit();
 }
 
 void resetMapConfigs(){

@@ -265,6 +265,7 @@ void monsterCheckIfHitPlayer(int mid){
 	if(distance < MONSTER_ATTACK_MIN_RANGE){
 		player.life--;
 		resetMapConfigs();
+		if(player.life <= 0) gameLevelGameOver();
 	}
 }
 
