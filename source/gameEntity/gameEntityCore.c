@@ -7,13 +7,14 @@
 //
 // ===========================================================================
 
-
 // ===========================================================================
 // 		Variáveis
 // ===========================================================================
 
+// Declaração da função responsável por centralizar todos os elementos em suas posições (caso o jogador sofra dano)
 void resetMapConfigs();
 
+// Enums relacionados a direção da movimentação do jogador/monstros e suas colisões
 enum {
 	DIR_UP,
 	DIR_RIGHT,
@@ -29,6 +30,7 @@ enum{
 	COLLISION_DIR_LEFT,
 };
 
+// Estrutura global principral da Entidade (rege os dados do jogador/monstro)
 typedef struct Entity{
 	float xPos;
 	float yPos;
@@ -54,15 +56,15 @@ typedef struct Entity{
 	int hits;
 	int score;
 	int level;
-
+	int currentTopPos;
 
 } Entity;
-
 
 // ===========================================================================
 // 		Dependencias
 // ===========================================================================
 
+// Inclui os dados das estidades criadas a partir da estrutura principal
 #include "obstacle.c"
 #include "player.c"
 #include "monster.c"
@@ -71,20 +73,23 @@ typedef struct Entity{
 // 		Funções
 // ===========================================================================
 
+// Atualiza as entidades caso o jogo esteja rodando
 void gameEntityUpdate(){
 
 	if(!isGameRunning || isGameOver) return;
-
 	monsterUpdate();
 	playerUpdate();
 }
 
+// Inicializa cada entidade
+// resetData é para zerar as variáveis do jogador/mapa/monstros caso o jogador morra e volte ao menu, assim inicializando os módulos novamente
 void gameEntityInit(bool resetData){
 	playerInit(resetData);
 	monsterInit();
 	mapCollidersInit();
 }
 
+// Responsável por centralizar todos os elementos em suas posições originais (caso o jogador sofra dano)
 void resetMapConfigs(){
 
 	player.xPos = player.originalPosition.x;

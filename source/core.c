@@ -11,7 +11,7 @@
 // 		Imports e Includes Globas
 // ===========================================================================
 
-// Bibliotecas Nativas e Raylib Game Engine
+// Bibliotecas Nativas e Raylib
 #include "stdio.h"
 #include "string.h"
 #include "stdlib.h"
@@ -19,12 +19,12 @@
 #include "math.h"
 #include "stdbool.h"
 #include "raylib.h"
-
+ 
 // ===========================================================================
-// 		Variáveis Globais
+// 		Variáveis Globais/Constantes
 // ===========================================================================
 
-// Janela Principal
+// Globais constantes
 const int SCREEN_WIDTH = 1200;  
 const int SCREEN_HEIGHT = 800;
 const int START_SCREEN_DIMENSION = 650;
@@ -33,26 +33,25 @@ const int TILE_LINES = SCREEN_HEIGHT/TILE_SIZE;
 const int TILE_ROWS = SCREEN_WIDTH/TILE_SIZE;
 char MAP[16][24];
     
-// Bool
-    
+// Globais de gerenciamento do game loop
 bool isGameRunning = false;
 bool isGameOver = false;
 
-// Declarações Core
+// Declaração das Funções principais
 int startGame();
 void loadNewLevel(int playerCurrentLevel);
 void gameLevelGameOver();
 
 // ===========================================================================
-// 		Dependencias do jogo
+// 		Dependencias do jogo (Módulos)
 // ===========================================================================
 
-#include "gameUtil/mathFuncs.c"
+#include "gameUtil/gameUtilMath.c"
 #include "gameTextures/gameTexturesCore.c"
-#include "gameData/gameDataCore.c"
+#include "gameAudio/gameAudioCore.c"
 #include "gameEntity/gameEntityCore.c"
-#include "gameEntity/gameMenu.c"
-#include "gameEntity/gameLevel.c"
+#include "gameLevels/gameLevel.c"
+#include "gameMenu/gameMenu.c"
 
 // ===========================================================================
 // 		Core
@@ -60,61 +59,63 @@ void gameLevelGameOver();
 
 int main(void){
 	
-
-	// Inicializa a janela 
+	// Inicializa a janela (Raylib)
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "ZIIL - Zelda");
 	SetWindowPosition((GetMonitorWidth(GetCurrentMonitor())/2) - SCREEN_WIDTH/2, (GetMonitorHeight(GetCurrentMonitor())/2 - SCREEN_HEIGHT/2)+ 50);
-	//SetWindowState(FLAG_WINDOW_UNDECORATED);
+	
+	// Inicializa o dispositivo de áudio (Raylib)
+	InitAudioDevice(); 
+
+	// Define o FPS para 60 (Raylib)
 	SetTargetFPS(60);
 
-	// Inicializa o
-	loadNewLevel(0);
-
-	// Inicializa cada arquivo e suas dependências
+	// Inicializa cada arquivo e suas dependências (Módulos)
+	gameAudioInit();
 	gameTexturesInit();
-	gameDataInit();
 	gameMenuInit();
-    
 
-	// Carrega as informaçõeSSs salvas do jogos e o scoreboard
-	gameDataLoad();
+	// Carrega as informações salvas do scoreboard
 	gameLevelLoadScoreboard();
 
-	// Inicia mostrando o menu inicialssss
-   
-
 	// Game Loop principal
-
     while (!WindowShouldClose()) 
     {
-
-    	// Desenha e atualiza as variáveis do jogo
-    	// Raylib Draw 
+    	// Raylib (Desenha e atualiza as variáveis do jogo)
         BeginDrawing();
 
-        // Processa cada arquivo e suas dependências
+        // Processa cada módulo e suas dependências
         gameMenuUpdate();
         gameTexturesUpdate();
         gameEntityUpdate();
         gameLevelUpdate();
+        gameAudioUpdate();
 
-        //Raylib end draw
+        // Raylib (Finaliza a atualização do frame)
         EndDrawing();
 
     }
+
+    // Finaliza o dispositivo de áudio (Raylib)
+    CloseAudioDevice(); 
     
 }
 
+// Inicia o jogo
 int startGame(){
 
+	// Centraliza a janela
 	SetWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	SetWindowPosition((GetMonitorWidth(GetCurrentMonitor())/2) - SCREEN_WIDTH/2, GetMonitorHeight(GetCurrentMonitor())/2 - SCREEN_HEIGHT/2);
+	
+	// Carrega o primeiro nível
 	loadNewLevel(0);
 
+	// Atualiza o status do jogo
 	isGameRunning = true;
 	isGameOver = false;
 
-
-
+	// Toca as músicas respectivas (Pausa a música do menu e inicia a música de batalha do jogo)
+	setMenuMusicPlaying(false);
+	setGameMusicPlaying(true);
 	return 1;
 }

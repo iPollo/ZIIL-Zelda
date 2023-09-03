@@ -7,12 +7,17 @@
 //
 // ===========================================================================
 
+// OBS: As texturas do jogo são assets carregados globalmente para utiliza-los em todo os script
+// São imagens/sprites/texturas etc.
+
+// Define o número máximo de textras do jogo
 #define MAX_GAME_TEXTURES 32
 
 // ===========================================================================
 // 		Variáveis
 // ===========================================================================
 
+// Enum responsável por controlar as texturas do jogo
 enum{
 	TXT_GROUND,
 	TXT_ROCK,
@@ -36,13 +41,14 @@ enum{
     TXT_MENU_GAMEOVER,
 };
 
+// Inicializa as texturas do jogo usando um Texture2D (Struct do próprio Raylib)
 Texture2D gameTextures[MAX_GAME_TEXTURES];
 
 // ===========================================================================
 // 		Funções
 // ===========================================================================
 
-// Inicializa as variaveis e arquivos
+// Inicializa as variaveis e arquivos de texturas 
 void gameTexturesInit(){
 
 	gameTextures[TXT_GROUND] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_GROUND.png");
@@ -65,13 +71,12 @@ void gameTexturesInit(){
 	gameTextures[TXT_MENU_BUTTONS] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MENU_BUTTON_SPRITESHEET.png");
 	gameTextures[TXT_MENU_SCOREBOARD] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MENU_SCOREBOARD.png");
 	gameTextures[TXT_MENU_GAMEOVER] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/GAMEOVER_SCREEN.png");
-
 }
 
-// Desenha o mapa
+// Desenha a textura completa do mapa, ou seja, o level atual do jogador
 void drawMap(){
 
-	// Desenha o plano de fundo
+	// Desenha o plano de fundo de acordo com o caractere
 	for(int i = 0; i < TILE_LINES; i++){
 		for(int j = 0; j < TILE_ROWS; j++){
 			if(MAP[i][j] == 'B' || MAP[i][j] == 'O' || MAP[i][j] == 'M' || MAP[i][j] == 'J'){
@@ -88,8 +93,5 @@ void drawMap(){
 void gameTexturesUpdate(){
 
 	if(!isGameRunning) return;
-
-
 	drawMap();
-
 }
