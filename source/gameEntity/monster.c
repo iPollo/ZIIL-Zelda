@@ -376,6 +376,5 @@ void monsterUpdate(){
 	// Verifica se todos monstros já morreram para carregar um novo nível
 	if(monsterCheckIfAllDie()){
 		loadNewLevel(player.level);
-		player.level++;
 	}
 }

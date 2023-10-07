@@ -43,7 +43,7 @@ void loadNewLevel(int playerCurrentLevel){
 	int rowCount = 0, lineCount = 0;
 
     // Carrega o arquivo de texto contendo os dados do level
-	const char *levelFileName = TextFormat("gameLevels/nivel%d.txt", newLevel);
+	const char *levelFileName = TextFormat("%s/gameLevels/nivel%d.txt", GetWorkingDirectory(), newLevel);
     FILE *fp = fopen(levelFileName, "r");
 
     // Caso atinja o nível máximo ou não encontre o arquivo (corrompido) o jogo finaliza
@@ -90,7 +90,7 @@ void loadNewLevel(int playerCurrentLevel){
 void gameLevelLoadScoreboard(){
 
     // Abre o arquivo
-    FILE *arq = fopen("topfive.bin", "rb");
+    FILE *arq = fopen(TextFormat("%s/topfive.bin", GetWorkingDirectory()), "rb");
 
     // Caso não exista cria um com os Dados ("Vazio", 0, 0)
     if(arq == NULL){
@@ -101,7 +101,7 @@ void gameLevelLoadScoreboard(){
         }
 
         // Abre e cria um novo arquivo
-        FILE *newArq = fopen("topfive.bin", "wb");
+        FILE *newArq = fopen(TextFormat("%s/topfive.bin", GetWorkingDirectory()), "wb");
 
         // Informa que deu erro na criação do arquivo
         if(newArq == NULL){

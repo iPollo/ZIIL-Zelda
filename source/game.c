@@ -62,7 +62,7 @@ int main(void){
 	// Inicializa a janela (Raylib)
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "ZIIL - Zelda");
 	SetWindowPosition((GetMonitorWidth(GetCurrentMonitor())/2) - SCREEN_WIDTH/2, (GetMonitorHeight(GetCurrentMonitor())/2 - SCREEN_HEIGHT/2)+ 50);
-	
+
 	// Inicializa o dispositivo de áudio (Raylib)
 	InitAudioDevice(); 
 

@@ -51,26 +51,26 @@ Texture2D gameTextures[MAX_GAME_TEXTURES];
 // Inicializa as variaveis e arquivos de texturas 
 void gameTexturesInit(){
 
-	gameTextures[TXT_GROUND] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_GROUND.png");
-	gameTextures[TXT_ROCK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_ROCK.png");
-	gameTextures[TXT_PLAYER_STATE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/PLAYER_STATE_SPRITESHEET.png");
-	gameTextures[TXT_PLAYER_WALK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/PLAYER_WALK_SPRITESHEET.png");
-	gameTextures[TXT_SLASH] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/SLASH_SPRITESHEET.png");
-	gameTextures[TXT_ATTACK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/PLAYER_ATTACK_SPRITESHEET.png");
-	gameTextures[TXT_MONSTER_STATE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_STATE_SPRITESHEET.png");
-	gameTextures[TXT_MONSTER_WALK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_WALK_SPRITESHEET.png");
-	gameTextures[TXT_HUD_LIFE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_HUD_LIFE.png");
-	gameTextures[TXT_HUD_SCORE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_HUD_SCORE.png");
-	gameTextures[TXT_HUD_LIFEBAR] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_HUD_LIFEBAR.png");
-	gameTextures[TXT_HUD_SCOREBACK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/TXT_HUD_SCOREBACK.png");
-	gameTextures[TXT_MONSTER_FOLLOW_STATE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_FOLLOW_STATE_SPRITESHEET.png");
-	gameTextures[TXT_MONSTER_HIT_STATE] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_HITSTATE_SPRITESHEET.png");
-	gameTextures[TXT_MONSTER_LIFE_SPRITESHEET] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_LIFE_SPRITESHEET.png");
-	gameTextures[TXT_MONSTER_ATTACK] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MONSTER_ATTACK_SPRITESHEET.png");
-	gameTextures[TXT_MENU_BACKGROUND] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MENU_BACKGROUND.png");
-	gameTextures[TXT_MENU_BUTTONS] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MENU_BUTTON_SPRITESHEET.png");
-	gameTextures[TXT_MENU_SCOREBOARD] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/MENU_SCOREBOARD.png");
-	gameTextures[TXT_MENU_GAMEOVER] = LoadTexture("C:/raylib/raylib/examples/ZIIL-Zelda/assets/GAMEOVER_SCREEN.png");
+	gameTextures[TXT_GROUND] = LoadTexture(TextFormat("%s/gameAssets/TXT_GROUND.png", GetWorkingDirectory()));
+	gameTextures[TXT_ROCK] = LoadTexture(TextFormat("%s/gameAssets/TXT_ROCK.png", GetWorkingDirectory()));
+	gameTextures[TXT_PLAYER_STATE] = LoadTexture(TextFormat("%s/gameAssets/PLAYER_STATE_SPRITESHEET.png", GetWorkingDirectory()));
+	gameTextures[TXT_PLAYER_WALK] = LoadTexture(TextFormat("%s/gameAssets/PLAYER_WALK_SPRITESHEET.png", GetWorkingDirectory()));
+	gameTextures[TXT_SLASH] = LoadTexture(TextFormat("%s/gameAssets/SLASH_SPRITESHEET.png", GetWorkingDirectory()));
+	gameTextures[TXT_ATTACK] = LoadTexture(TextFormat("%s/gameAssets/PLAYER_ATTACK_SPRITESHEET.png", GetWorkingDirectory()));
+	gameTextures[TXT_MONSTER_STATE] = LoadTexture(TextFormat("%s/gameAssets/MONSTER_STATE_SPRITESHEET.png", GetWorkingDirectory()));
+	gameTextures[TXT_MONSTER_WALK] = LoadTexture(TextFormat("%s/gameAssets/MONSTER_WALK_SPRITESHEET.png", GetWorkingDirectory()));
+	gameTextures[TXT_HUD_LIFE] = LoadTexture(TextFormat("%s/gameAssets/TXT_HUD_LIFE.png", GetWorkingDirectory()));
+	gameTextures[TXT_HUD_SCORE] = LoadTexture(TextFormat("%s/gameAssets/TXT_HUD_SCORE.png", GetWorkingDirectory()));
+	gameTextures[TXT_HUD_LIFEBAR] = LoadTexture(TextFormat("%s/gameAssets/TXT_HUD_LIFEBAR.png", GetWorkingDirectory()));
+	gameTextures[TXT_HUD_SCOREBACK] = LoadTexture(TextFormat("%s/gameAssets/TXT_HUD_SCOREBACK.png", GetWorkingDirectory()));
+	gameTextures[TXT_MONSTER_FOLLOW_STATE] = LoadTexture(TextFormat("%s/gameAssets/MONSTER_FOLLOW_STATE_SPRITESHEET.png", GetWorkingDirectory()));
+	gameTextures[TXT_MONSTER_HIT_STATE] = LoadTexture(TextFormat("%s/gameAssets/MONSTER_HITSTATE_SPRITESHEET.png", GetWorkingDirectory()));
+	gameTextures[TXT_MONSTER_LIFE_SPRITESHEET] = LoadTexture(TextFormat("%s/gameAssets/MONSTER_LIFE_SPRITESHEET.png", GetWorkingDirectory()));
+	gameTextures[TXT_MONSTER_ATTACK] = LoadTexture(TextFormat("%s/gameAssets/MONSTER_ATTACK_SPRITESHEET.png", GetWorkingDirectory()));
+	gameTextures[TXT_MENU_BACKGROUND] = LoadTexture(TextFormat("%s/gameAssets/MENU_BACKGROUND.png", GetWorkingDirectory()));
+	gameTextures[TXT_MENU_BUTTONS] = LoadTexture(TextFormat("%s/gameAssets/MENU_BUTTON_SPRITESHEET.png", GetWorkingDirectory()));
+	gameTextures[TXT_MENU_SCOREBOARD] = LoadTexture(TextFormat("%s/gameAssets/MENU_SCOREBOARD.png", GetWorkingDirectory()));
+	gameTextures[TXT_MENU_GAMEOVER] = LoadTexture(TextFormat("%s/gameAssets/GAMEOVER_SCREEN.png", GetWorkingDirectory()));
 }
 
 // Desenha a textura completa do mapa, ou seja, o level atual do jogador

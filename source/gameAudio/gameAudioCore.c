@@ -42,7 +42,7 @@ Sound gameSound[MAX_SOUNDS];
 // Responsável por reproduzir/pausar a música do menu
 void setMenuMusicPlaying(bool play){
 	if(play){
-		SFX_MENU = LoadMusicStream("C:/raylib/raylib/examples/ZIIL-Zelda/assets/sfx/SFXMUSIC_MENU.mp3"); 
+		SFX_MENU = LoadMusicStream(TextFormat("%s/gameAssets/sfx/SFXMUSIC_MENU.mp3", GetWorkingDirectory())); 
 		SFX_MENU.looping = true;
 		PlayMusicStream(SFX_MENU);
 	}
@@ -55,7 +55,7 @@ void setMenuMusicPlaying(bool play){
 // Responsável por reproduzir/pausar a música de batalha do jogo
 void setGameMusicPlaying(bool play){
 	if(play){
-		SFX_GAME = LoadMusicStream("C:/raylib/raylib/examples/ZIIL-Zelda/assets/sfx/SFXMUSIC_GAME.mp3"); 
+		SFX_GAME = LoadMusicStream(TextFormat("%s/gameAssets/sfx/SFXMUSIC_GAME.mp3", GetWorkingDirectory())); 
 		SFX_GAME.looping = true;
 		PlayMusicStream(SFX_GAME);
 		SetMusicVolume(SFX_GAME, 0.2);    
@@ -68,12 +68,12 @@ void setGameMusicPlaying(bool play){
 
 // Inicializa os efeitos sonoros, carregando-os respectivamente na array
 void gameAudioInit(){
-	gameSound[SFX_MENU_BUTTON] = LoadSound("C:/raylib/raylib/examples/ZIIL-Zelda/assets/sfx/SFX_MENU_BUTTON.wav");
-	gameSound[SFX_GAMEOVER] = LoadSound("C:/raylib/raylib/examples/ZIIL-Zelda/assets/sfx/SFX_GAMEOVER.mp3");
-	gameSound[SFX_SWORD_SLASH] = LoadSound("C:/raylib/raylib/examples/ZIIL-Zelda/assets/sfx/SFX_SWORD_SLASH.mp3");
-	gameSound[SFX_MONSTER_DAMAGE] = LoadSound("C:/raylib/raylib/examples/ZIIL-Zelda/assets/sfx/SFX_MONSTER_DAMAGE.mp3");
-	gameSound[SFX_MONSTER_HIT] = LoadSound("C:/raylib/raylib/examples/ZIIL-Zelda/assets/sfx/SFX_MONSTER_HIT.mp3");
-	gameSound[SFX_LEVELUP] = LoadSound("C:/raylib/raylib/examples/ZIIL-Zelda/assets/sfx/SFX_LEVELUP.mp3");
+	gameSound[SFX_MENU_BUTTON] = LoadSound(TextFormat("%s/gameAssets/sfx/SFX_MENU_BUTTON.wav", GetWorkingDirectory()));
+	gameSound[SFX_GAMEOVER] = LoadSound(TextFormat("%s/gameAssets/sfx/SFX_GAMEOVER.mp3", GetWorkingDirectory()));
+	gameSound[SFX_SWORD_SLASH] = LoadSound(TextFormat("%s/gameAssets/sfx/SFX_SWORD_SLASH.mp3", GetWorkingDirectory()));
+	gameSound[SFX_MONSTER_DAMAGE] = LoadSound(TextFormat("%s/gameAssets/sfx/SFX_MONSTER_DAMAGE.mp3", GetWorkingDirectory()));
+	gameSound[SFX_MONSTER_HIT] = LoadSound(TextFormat("%s/gameAssets/sfx/SFX_MONSTER_HIT.mp3", GetWorkingDirectory()));
+	gameSound[SFX_LEVELUP] = LoadSound(TextFormat("%s/gameAssets/sfx/SFX_LEVELUP.mp3", GetWorkingDirectory()));
 }
 
 // Atualiza as músicas a cada frame (como demonstrado na documentação da biblioteca)
